@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white;
+    @apply text-black;
+    @apply dark:bg-black;
+    @apply dark:text-white;
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  header {
+    @apply bg-gradient-to-b;
+    @apply from-purple-900;
+    @apply to-white;
+    @apply dark:to-black;
+    @apply h-72;
+    @apply pt-3;
+  }
+
+  header img {
+    @apply mx-auto;
+    @apply block;
+    @apply h-60;
+    @apply w-auto;
+  }
+
+  main {
+    @apply mx-auto;
+    @apply block;
+    width: 1200px;
+    max-width: 95%;
+    @apply text-center;
+  }
+
+  h1 {
+    @apply text-4xl;
+    @apply mt-8;
+    @apply mb-3;
+    @apply font-bold;
+  }
+
+  p {
+    @apply my-7;
+  }
+
+  h2 {
+    @apply text-2xl;
+    @apply mt-8;
+    @apply mb-3;
+    @apply font-bold;
+  }
+
+  .serverList {
+    @apply md:grid;
+    @apply md:grid-cols-3;
+    @apply md:gap-3;
+  }
+
+  .serverCard {
+    @apply max-w-sm;
+    @apply rounded;
+    @apply overflow-hidden;
+    @apply shadow-lg;
+    @apply dark:shadow-slate-400;
+    @apply dark:border-gray-400;
+    @apply mb-8;
+  }
+
+  .serverCard img {
+    width: 100%;
+    height: 100px;
+    @apply object-cover;
+  }
+
+  .serverCard h3 {
+    @apply font-semibold;
+    @apply text-xl;
+    @apply mt-2;
+  }
+
+  .joinDiscord {
+    @apply inline;
+  }
+}
