@@ -46,7 +46,7 @@ const Index = () => {
           src="/images/discord.png"
           alt="Join our Discord server"
           width="400"
-          height="141"
+          height="136"
         />
       </Link>
 
