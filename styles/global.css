@@ -86,4 +86,14 @@
   .joinDiscord {
     @apply inline;
   }
+
+  footer {
+    @apply border-t-gray-400;
+    @apply border-t-2;
+    @apply py-4;
+  }
+
+  footer a {
+    @apply hover:underline;
+  }
 }

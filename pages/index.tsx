@@ -66,6 +66,11 @@ const Index = () => {
           </div>
         ))}
       </div>
+
+      <footer>
+        &copy; 2022 Madhouse Miners |{" "}
+        <a href="https://status.madhouseminers.com/status/mc">Server Status</a>
+      </footer>
     </>
   );
 };
