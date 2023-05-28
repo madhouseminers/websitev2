@@ -3,8 +3,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.ctfassets.net",
-        port: "",
+        hostname: "res.cloudinary.com",
         pathname: "/**",
       },
     ],

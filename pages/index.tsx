@@ -1,36 +1,70 @@
-import * as contentful from "contentful";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const client = contentful.createClient({
-  space: "zml6srrh15p8",
-  accessToken: "ZQgXTKmbrXGYWHFHQ_TymupzRjXr-nWRF9hNsB4cXhE",
-});
+interface Logo {
+  url: string;
+  height: number;
+  width: number;
+}
+
+interface Server {
+  id: number;
+  name: string;
+  serverAddress: string;
+  version: string;
+  logo: Logo[];
+}
+
+interface APIResponse {
+  id: number;
+  attributes: {
+    name: string;
+    serverAddress: string;
+    version: string;
+    logo: {
+      data: {
+        attributes: {
+          formats: {
+            large: { height: number; width: number; url: string };
+            medium: { height: number; width: number; url: string };
+            small: { height: number; width: number; url: string };
+          };
+        };
+      };
+    };
+  };
+}
+
+const baseUrl = "https://mhm-cms.fly.dev";
 
 const Index = () => {
-  const [servers, setServers] = useState<
-    contentful.Entry<{
-      name: string;
-      serverAddress: string;
-      version: string;
-      logo: contentful.Asset;
-    }>[]
-  >([]);
+  const [servers, setServers] = useState<Server[]>([]);
 
   useEffect(() => {
-    client
-      .getEntries<{
-        name: string;
-        serverAddress: string;
-        version: string;
-        logo: contentful.Asset;
-      }>({
-        content_type: "server",
-      })
-      .then((results) => results.items)
-      .then((items) => setServers(items));
+    (async () => {
+      const apiResults = await fetch(`${baseUrl}/api/servers?populate=*`);
+      const data: APIResponse[] = (await apiResults.json()).data;
+      setServers(
+        data.map((entry) => ({
+          id: entry.id,
+          name: entry.attributes.name,
+          serverAddress: entry.attributes.serverAddress,
+          version: entry.attributes.version,
+          logo: [
+            {
+              height:
+                entry.attributes.logo.data.attributes.formats.large.height,
+              width: entry.attributes.logo.data.attributes.formats.large.width,
+              url: entry.attributes.logo.data.attributes.formats.large.url,
+            },
+          ],
+        }))
+      );
+    })();
   }, []);
+
+  if (!servers.length) return null;
 
   return (
     <>
@@ -54,23 +88,21 @@ const Index = () => {
       <p>This is a list of the servers we've currently got running.</p>
       <div className="serverList">
         {servers.map((server) => (
-          <div className="serverCard" key={server.sys.id}>
+          <div className="serverCard" key={server.id}>
             <Image
-              src={`https:${server.fields.logo.fields.file.url}`}
-              alt={`${server.fields.name} Banner`}
-              {...server.fields.logo.fields.file.details.image}
+              src={`${server.logo[0].url}`}
+              alt={`${server.name} Banner`}
+              width={server.logo[0].width}
+              height={server.logo[0].height}
             />
-            <h3>{server.fields.name}</h3>
-            <p>Hostname: {server.fields.serverAddress}</p>
-            <p>Version: {server.fields.version}</p>
+            <h3>{server.name}</h3>
+            <p>Hostname: {server.serverAddress}</p>
+            <p>Version: {server.version}</p>
           </div>
         ))}
       </div>
 
-      <footer>
-        &copy; 2022 Madhouse Miners |{" "}
-        <a href="https://status.madhouseminers.com/status/mc">Server Status</a>
-      </footer>
+      <footer>&copy; 2022 Madhouse Miners</footer>
     </>
   );
 };
